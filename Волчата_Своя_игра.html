@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Своя игра: Волчата и Олжас Сулейменов</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+  background: linear-gradient(180deg,#d9f99d,#bbf7d0);
+  font-family: sans-serif;
+}
+.category {background:#166534;color:white;font-weight:bold;padding:10px;border-radius:10px;text-align:center;}
+.tile {background:white;font-size:22px;font-weight:bold;color:#166534;height:70px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;}
+.tile.used {opacity:.3;cursor:default;}
+.modal {display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center;}
+.modal-content {background:white;padding:30px;border-radius:20px;max-width:600px;text-align:center;}
+</style>
+</head>
+<body class="p-6">
+
+<h1 class="text-3xl font-black text-green-900 text-center mb-6">
+Своя игра: Волчата и Олжас Сулейменов 🐺
+</h1>
+
+<div id="board" class="grid grid-cols-3 gap-3"></div>
+
+<div id="modal" class="modal">
+ <div class="modal-content">
+   <h2 id="cat"></h2>
+   <p id="question" class="text-xl font-semibold mt-4"></p>
+   <p id="answer" class="text-green-700 font-bold mt-4 hidden"></p>
+   <button onclick="showAnswer()" class="mt-6 px-6 py-2 bg-green-700 text-white rounded-full">Показать ответ</button>
+   <button onclick="closeModal()" class="mt-2 px-6 py-2 border border-green-700 rounded-full">Закрыть</button>
+ </div>
+</div>
+
+<script>
+const data = [
+{
+category:"Стихотворение «Волчата»",
+questions:[
+{v:100,q:"Кто является главными персонажами стихотворения?",a:"Волчата"},
+{v:200,q:"Какое чувство вызывает образ волчат?",a:"Сострадание"},
+{v:300,q:"Кто разорил волчье логово?",a:"Человек"},
+{v:400,q:"Почему волчата оказались беззащитными?",a:"Они потеряли мать"},
+{v:500,q:"Главная мысль стихотворения?",a:"Человек ответственен за природу"}
+]},
+{
+category:"Биография Сулейменова",
+questions:[
+{v:100,q:"Год рождения Олжаса Сулейменова?",a:"1936"},
+{v:200,q:"Где он родился?",a:"Казахстан"},
+{v:300,q:"Какую профессию получил?",a:"Геолог"},
+{v:400,q:"Первая известная книга стихов?",a:"Аргамаки"},
+{v:500,q:"Какой антиядерный проект он возглавил?",a:"Невада – Семипалатинск"}
+]},
+{
+category:"Творчество и идеи",
+questions:[
+{v:100,q:"Главная тема творчества Сулейменова?",a:"Человек и природа"},
+{v:200,q:"Произведение против ядерных испытаний?",a:"Земля, поклонись человеку"},
+{v:300,q:"Название его исследования о слове?",a:"Аз и Я"},
+{v:400,q:"Какая идея звучит в «Волчата»?",a:"Гуманизм"},
+{v:500,q:"Почему его творчество важно сегодня?",a:"Призывает к миру и защите природы"}
+]}
+];
+
+const board=document.getElementById("board");
+data.forEach(cat=>{
+ let head=document.createElement("div");
+ head.className="category";
+ head.innerText=cat.category;
+ board.appendChild(head);
+});
+
+for(let i=0;i<5;i++){
+ data.forEach(cat=>{
+  let tile=document.createElement("div");
+  tile.className="tile";
+  tile.innerText=cat.questions[i].v;
+  tile.onclick=()=>openQ(cat,cat.questions[i],tile);
+  board.appendChild(tile);
+ });
+}
+
+let activeTile;
+function openQ(cat,q,t){
+ if(t.classList.contains("used"))return;
+ activeTile=t;
+ document.getElementById("cat").innerText=cat.category+" — "+q.v;
+ document.getElementById("question").innerText=q.q;
+ document.getElementById("answer").innerText=q.a;
+ document.getElementById("answer").classList.add("hidden");
+ document.getElementById("modal").style.display="flex";
+}
+function showAnswer(){document.getElementById("answer").classList.remove("hidden");}
+function closeModal(){document.getElementById("modal").style.display="none";activeTile.classList.add("used");}
+</script>
+
+</body>
+</html>
